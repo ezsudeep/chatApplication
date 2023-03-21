@@ -8,7 +8,7 @@ app.use(morgan('tiny'));
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-  res.render('home');
+  res.sendFile(__dirname + '/public/home.html');
 });
 const port = process.env.PORT || 4000;
 
@@ -23,8 +23,18 @@ const io = socket(server, { cors: { origin: '*' } });
 io.on('connection', (socket) => {
   console.log('made socket connection', socket.id);
 
-  //hnadle chat events
+  //handle chat events
+
+  /* Listening for a chat event. When a chat event is emitted, it will log the data and emit the data
+  to all sockets. */
   socket.on('chat', (data) => {
-    io.sockets.emit('data', data);
+    console.log(data);
+    /* Emitting the data to all sockets. */
+    io.sockets.emit('chat', data);
+  });
+
+  // Handle typing event
+  socket.on('typing', (data) => {
+    socket.broadcast.emit('typing', data);
   });
 });

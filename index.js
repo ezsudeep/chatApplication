@@ -17,10 +17,14 @@ const server = app.listen(port, () => {
 });
 
 // socket setup
-// const io = socket(server, { cors: { origin: '*' } });
-const io = socket(server);
+const io = socket(server, { cors: { origin: '*' } });
 
 /* Listening for a connection event. When a connection is made, it will log the socket id. */
 io.on('connection', (socket) => {
   console.log('made socket connection', socket.id);
+
+  //hnadle chat events
+  socket.on('chat', (data) => {
+    io.sockets.emit('data', data);
+  });
 });

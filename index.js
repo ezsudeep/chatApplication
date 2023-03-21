@@ -32,9 +32,4 @@ io.on('connection', (socket) => {
     /* Emitting the data to all sockets. */
     io.sockets.emit('chat', data);
   });
-
-  // Handle typing event
-  socket.on('typing', (data) => {
-    socket.broadcast.emit('typing', data);
-  });
 });

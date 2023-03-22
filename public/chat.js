@@ -15,7 +15,11 @@ btn.addEventListener('click', () => {
     message: message.value,
     handle: handle.value,
   });
-  message.value = '';
+});
+
+/* This is listening for the keypress event and then emitting the typing event with the handle. */
+message.addEventListener('keypress', () => {
+  socket.emit('typing', handle.value);
 });
 
 /* This is listening for the 'chat' event and then running the function that is passed in. */
@@ -25,4 +29,9 @@ socket.on('chat', function (data) {
   feedback.innerHTML = '';
   output.innerHTML +=
     '<p><strong>' + data.handle + ': </strong>' + data.message + '</p>';
+});
+
+/* This is listening for the 'typing' event */
+socket.on('typing', (data) => {
+  feedback.innerHTML = '<p>' + data + 'is typing a message...</p>';
 });

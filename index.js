@@ -3,8 +3,10 @@ const morgan = require('morgan');
 const app = express();
 const socket = require('socket.io');
 require('dotenv').config();
+const logger = require("./loggger.js")
 
-app.use(morgan('tiny'));
+
+app.use(morgan('dev'));
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
@@ -21,7 +23,7 @@ const io = socket(server, { cors: { origin: '*' } });
 
 /* Listening for a connection event. When a connection is made, it will log the socket id. */
 io.on('connection', (socket) => {
-  console.log('made socket connection with user ID', socket.id);
+  console.log('Made socket connection with user ID', socket.id);
 
   //handle chat events
 
@@ -40,6 +42,9 @@ io.on('connection', (socket) => {
 
   // listening for a user disconnection
   socket.on('disconnect', () => {
-    console.log('User disconnected with ID', socket.id);
+    // console.log('User disconnected with ID', socket.id);
+    logger.info('User disconnected with ID', socket.id)
   });
+
+
 });

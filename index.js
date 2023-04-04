@@ -21,7 +21,7 @@ const io = socket(server, { cors: { origin: '*' } });
 
 /* Listening for a connection event. When a connection is made, it will log the socket id. */
 io.on('connection', (socket) => {
-  console.log('made socket connection', socket.id);
+  console.log('made socket connection with user ID', socket.id);
 
   //handle chat events
 
@@ -33,7 +33,13 @@ io.on('connection', (socket) => {
     io.sockets.emit('chat', data);
   });
 
+  // listening for a user typing
   socket.on('typing', (data) => {
     socket.broadcast.emit('typing', data);
+  });
+
+  // listening for a user disconnection
+  socket.on('disconnect', () => {
+    console.log('User disconnected with ID', socket.id);
   });
 });
